@@ -62,6 +62,19 @@
 		    "path" : "pages/my/goods_management/goods_management",
 		    "style" : {}
 		}
+     
+        ,{
+            "path" : "pages/my/goods_add/goods_add",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/my/goods_edit/goods_edit",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/my/my_info/my_info",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

@@ -1,66 +1,13 @@
 <template>
 	<view>
-		<!-- 头部 -->
-		<view class="top padding bg-white">
-			<view class="top_image">
-				<image src="../../static/logo.png" mode=""></image>
-			</view>
-
-			<view class="top_name ">
-
-				<view class="top_name_top">
-					学点
-				</view>
-
-				<view class="top_name_boutton">
-					暂无职位信息
-				</view>
-			</view>
-
-			<view class="top_qr" @click="showQR">
-				<image src="../../static/qrCode.png" mode=""></image>
-			</view>
-
-		</view>
-
-		<!-- end -->
-
-
-		<!-- 3居中布局 -->
-
-
-		<view class="san_bu  bg-white">
-
-			<view class="san_bu_left">
-
-				<view class="san_bu_left_image">
-					<image src="../../static/logo.png" mode=""></image>
-				</view>
-				<text>会员中心</text>
-
-			</view>
-
-			<view class="san_bu_left">
-
-				<view class="san_bu_left_image">
-					<image src="../../static/logo.png" mode=""></image>
-				</view>
-				<text>会员中心</text>
-
-			</view>
-
-			<view class="san_bu_left">
-
-				<view class="san_bu_left_image">
-					<image src="../../static/logo.png" mode=""></image>
-				</view>
-				<text>会员中心</text>
-			</view>
-		</view>
-
-
-
 		<view class="items bg-white cu-list menu magrin-top-lg ">
+
+			<view class="cu-item arrow " @click="openInfo">
+				<view class="content">
+					<text class="cuIcon-emojiflashfill text-pink"></text>
+					<text class="text-grey">我的信息</text>
+				</view>
+			</view>
 
 			<view class="cu-item arrow " @click="myAuth">
 				<view class="content">
@@ -75,7 +22,7 @@
 					<text class="text-grey">公司编辑</text>
 				</view>
 			</view>
-			
+
 			<view class="cu-item arrow items_margin" @click="GoodsManagement">
 				<view class="content">
 					<text class="cuIcon-emojiflashfill text-pink"></text>
@@ -97,30 +44,35 @@
 			}
 		},
 		methods: {
-				// 跳转我的认证
-				myAuth:function(){
-					uni.navigateTo({
-						url:'/pages/my/my_auth/my_auth'
-					})
-				},
-				
-				// 跳转编辑页面
-				companyEdit:function(){
-					uni.navigateTo({
-						url:"/pages/my/company_edit/company_edit"
-					})
-				},
-				GoodsManagement:function(){
-					uni.navigateTo({
-						url:"/pages/my/goods_management/goods_management"
-					})
-				},
-				
-				// 显示二维码
-				showQR:function(){
-					
-				}
-				
+			// 跳转我的认证
+			myAuth: function() {
+				uni.navigateTo({
+					url: '/pages/my/my_auth/my_auth'
+				})
+			},
+			openInfo:function(){
+				uni.navigateTo({
+					url: '/pages/my/my_info/my_info'
+				})
+			},
+
+			// 跳转编辑页面
+			companyEdit: function() {
+				uni.navigateTo({
+					url: "/pages/my/company_edit/company_edit"
+				})
+			},
+			GoodsManagement: function() {
+				uni.navigateTo({
+					url: "/pages/my/goods_management/goods_management"
+				})
+			},
+
+			// 显示二维码
+			showQR: function() {
+
+			}
+
 		}
 	}
 </script>
