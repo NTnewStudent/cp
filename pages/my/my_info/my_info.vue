@@ -15,6 +15,10 @@
 					<input placeholder="联系号码" name="input" type="number"></input>
 				</view>
 				<view class="cu-form-group">
+					<view class="title">座机号码</view>
+					<input placeholder="座机号码" name="input" type="number"></input>
+				</view>
+				<view class="cu-form-group">
 					<view class="title">公司地址</view>
 					<input placeholder="公司地址" name="input" type="number"></input>
 				</view>
