@@ -205,7 +205,6 @@
 					}
 				});
 			},
-			
 			// 加载首页数据
 			showHome:function(){
 				uni.request({
@@ -235,6 +234,7 @@
 			
 			// 加载首页数据
 			this.showHome();
+			
 			
 		},
 		onShow:function(){

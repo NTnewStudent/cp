@@ -1,7 +1,15 @@
 <template>
 	<view>
 		<view class="items bg-white cu-list menu magrin-top-lg ">
-
+			
+			<view class="cu-item arrow " @click="openLogin">
+				<view class="content">
+					<text class="cuIcon-emojiflashfill text-pink"></text>
+					<text class="text-grey">登录</text>
+				</view>
+			</view>
+			
+			
 			<view class="cu-item arrow " @click="openInfo">
 				<view class="content">
 					<text class="cuIcon-emojiflashfill text-pink"></text>
@@ -44,6 +52,11 @@
 			}
 		},
 		methods: {
+			openLogin:function(){
+				uni.navigateTo({
+					url: '/pages/login/login'
+				})
+			},
 			// 跳转我的认证
 			myAuth: function() {
 				uni.navigateTo({
