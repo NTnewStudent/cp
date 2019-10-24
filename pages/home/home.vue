@@ -37,7 +37,7 @@
 		<view class="controller bg-white">
 
 			<!-- 3布局 -->
-			<view class="san_bus padding solid-bottom ">
+		<!--	<view class="san_bus padding solid-bottom ">
 
 				<view class="sna_bus_left ">
 
@@ -58,6 +58,7 @@
 				</view>
 
 			</view>
+			-->
 			<!-- end -->
 
 
