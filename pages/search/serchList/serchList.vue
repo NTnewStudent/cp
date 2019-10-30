@@ -128,19 +128,17 @@
 
 
 		<!-- foot -->
+		<view class="foot justify-between margin-top-sm" style="position: fixed;">
 
-		<view class="foot justify-between margin-top-sm  ">
-
-			<button class=" cu-btn block bg-blue  lg" style="width: 100%;margin-right: 20upx;">
+			<a class=" cu-btn block bg-blue  lg" style="width: 100%;margin-right: 20upx;" :href="bean.url_file">
 				<text class="cuIcon-phone"></text>
-				<text style="padding-left: 10upx;" @click="downlaod(bean.url_file)">下载材料需求文件</text>
-			</button>
+				<text style="padding-left: 10upx;">下载材料需求文件</text>
+			</a>
 
 			<button class="cu-btn block lines-blue lg" style="width: 100%;margin-right: 6%;">
 				<text class="cuIcon-upload"></text>
 				<text style="padding-left: 10upx;" @click="upload">投标提交报价</text>
 			</button>
-
 		</view>
 		<!-- end -->
 
@@ -158,10 +156,19 @@
 			}
 		},
 		methods: {
+			showTip(){
+				uni.showModal({
+					content:'操作流程：下载材料需求文档，填写物品报价，点击投标提交报价上传填写好的报价表。'+
+					'等待招标商联系。\n\n告知：凡是在本平台交易成功收取百分之一的技术咨询服务费。'
+				})
+			},
+			down(e) {
+				console.log(e)
+			},
 			downlaod(url) {
 				uni.showLoading({
-					title:'下载中...',
-					mask:true
+					title: '下载中...',
+					mask: true
 				})
 				uni.downloadFile({
 					url: url,
@@ -169,30 +176,36 @@
 						console.log(res)
 						if (res.statusCode === 200) {
 							uni.showToast({
-								duration:2000,
-								title:'下载成功',
+								duration: 2000,
+								title: '下载成功',
 							})
-							uni.saveFile({
-								tempFilePath:res.tempFilePath,
-								success(res) {
-									
+							console.log(res)
+							uni.openDocument({
+								filePath: res.tempFilePath,
+								success: function(res) {
+									console.log('打开文档成功');
+								},
+								fail:function(e) {
+									console.log(e)
 								}
-							})
+							});
 						}
 					},
-					fail:(error)=>{
+					fail: (error) => {
 						uni.showToast({
-							duration:2000,
-							title:'下载失败'
+							duration: 2000,
+							title: '下载失败'
 						})
 					},
-					complete:()=>{
+					complete: () => {
 						uni.hideLoading()
 					}
 				})
 			},
 			upload() {
-
+				uni.navigateTo({
+					url:"/pages/search/uploadform/uploadform"
+				})
 			},
 			init(param) {
 				var token = uni.getStorageSync("token")
@@ -202,7 +215,7 @@
 
 				uni.request({
 					url: 'https://www.zoba.fun/client/public/index.php/getByIdForm',
-					method:'get',
+					method: 'get',
 					data: {
 						token: token,
 						id: param
@@ -233,6 +246,7 @@
 			console.log(option)
 			this.init(option.id)
 			this.formdata.id = option.id
+			this.showTip()
 		}
 	}
 </script>

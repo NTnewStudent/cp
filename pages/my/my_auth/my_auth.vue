@@ -102,7 +102,7 @@
 				this.loading = 'cuIcon-loading2';
 
 				var token = uni.getStorageSync("token")
-				uni.getSo
+				
 				var self = this
 				if (token == '')
 					token = "$2y$10$vKopYEBwV3yG9eRTuoMI5u1DmPinK2biTtKvZHP2QArC8bLi3LjTy"

@@ -12,15 +12,15 @@
 			<form>
 				<view class="cu-form-group">
 					<view class="title">商品名称</view>
-					<input placeholder="商品名称" name="input"></input>
+					<input placeholder="商品名称" name="input" v-model="goods_name"></input>
 				</view>
 				<view class="cu-form-group">
 					<view class="title">产品价格</view>
-					<input placeholder="产品价格" name="input" type="digit"></input>
+					<input placeholder="产品价格" name="input" type="digit"  v-model="price" ></input>
 				</view>
 				<view class="cu-form-group align-start">
 					<view class="title">商品描述</view>
-					<textarea maxlength="-1" :disabled="modalName!=null" @input="textareaBValue" placeholder="多行文本输入框"></textarea>
+					<textarea maxlength="-1" :disabled="modalName!=null" @input="textareaBValue" placeholder="多行文本输入框" v-model="goods_desc"></textarea>
 				</view>
 
 				<!--上传图片-->
@@ -41,7 +41,7 @@
 								<text class='cuIcon-close'></text>
 							</view>
 						</view>
-						<view class="solids" @tap="ChooseImage" v-if="imgList.length<=1">
+						<view class="solids" @tap="ChooseImage" v-if="imgList.length<1">
 							<text class='cuIcon-cameraadd'></text>
 						</view>
 					</view>
@@ -71,8 +71,11 @@
 					imgList: [], //图片
 				},
 				imgList: [], //图片
-				loading:'',//图片加载状态 cuIcon-loading2
-				text:'提交',//文字提示
+				loading: '', //图片加载状态 cuIcon-loading2
+				text: '提交', //文字提示
+				price:'',
+				goods_desc:'',
+				goods_name:''
 			}
 		},
 		methods: {
@@ -82,7 +85,7 @@
 			// 图片
 			ChooseImage() {
 				uni.chooseImage({
-					count: 2, //默认9
+					count: 1, //默认9
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 					sourceType: ['album'], //从相册选择
 					success: (res) => {
@@ -122,12 +125,59 @@
 				this.text = '上传中...';
 				this.loading = 'cuIcon-loading2';
 
-				// 模拟发送
-				setTimeout(() => {
-					this.text = '上传';
-					this.loading = '';
+				var token = uni.getStorageSync("token")
+				var self = this
+				if (token == '')
+					token = "$2y$10$vKopYEBwV3yG9eRTuoMI5u1DmPinK2biTtKvZHP2QArC8bLi3LjTy"
 
-				}, 3000);
+				if (this.tempFile == this.imgList)
+					this.showFail()
+
+				var formdata = {
+					token: token,
+					file: this.fileObj
+				}
+
+				console.log(formdata)
+				var that = this 
+				uni.uploadFile({
+					url: 'https://www.zoba.fun/client/public/index.php/uploadImage', //仅为示例，并非真实接口地址。
+					filePath: this.imgList[0],
+					name: 'file',
+					formData: {
+						'token': token,
+						'goods_name':that.goods_name,
+						'goods_desc':that.goods_desc,
+						'price':that.price
+					},
+					success: (uploadFileRes) => {
+						console.log(uploadFileRes.data);
+						uni.showToast({
+							title: '添加成功',
+							icon: 'none',
+							duration: 2000
+						})
+						self.text = '上传';
+						self.loading = '';
+					},
+					fail: (error) => {
+						console.log(error)
+						uni.showToast({
+							title: '添加失败',
+							icon: 'none',
+							duration: 2000
+						})
+						self.text = '上传';
+						self.loading = '';
+					},
+					complete() {
+						that.goods_desc=''
+						that.goods_name=''
+						that.price=''
+					}
+
+
+				})
 
 			}
 		}

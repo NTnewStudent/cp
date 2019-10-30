@@ -75,6 +75,14 @@
             "path" : "pages/my/my_info/my_info",
             "style" : {}
         }
+        ,{
+            "path" : "pages/search/uploadform/uploadform",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/home/test/test",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
