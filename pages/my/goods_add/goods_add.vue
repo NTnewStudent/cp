@@ -141,7 +141,7 @@
 				console.log(formdata)
 				var that = this 
 				uni.uploadFile({
-					url: 'https://www.zoba.fun/client/public/index.php/uploadImage', //仅为示例，并非真实接口地址。
+					url: 'https://www.zoba.fun/client/public/index.php/addGoods', //仅为示例，并非真实接口地址。
 					filePath: this.imgList[0],
 					name: 'file',
 					formData: {

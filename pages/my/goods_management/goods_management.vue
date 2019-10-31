@@ -116,7 +116,7 @@
 							self.init()
 						} else {
 							uni.showToast({
-								title: '网络异常',
+								title: res.data.msg,
 								icon: 'none',
 								duration: 2000
 							})
@@ -149,7 +149,7 @@
 							self.datalist = res.data.msg
 						} else {
 							uni.showToast({
-								title: '网络异常',
+								title: res.data.msg,
 								icon: 'none',
 								duration: 2000
 							})
