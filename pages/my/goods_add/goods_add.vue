@@ -174,6 +174,7 @@
 						that.goods_desc=''
 						that.goods_name=''
 						that.price=''
+						that.imgList=''
 					}
 
 

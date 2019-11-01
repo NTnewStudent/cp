@@ -25,7 +25,8 @@
 				showfile: false, 
 				filename: 'xxx',
 				fileinfo: {},
-				filepaths: []
+				filepaths: [],
+				formdata:''
 			};
 		},
 		// 计算属性
@@ -50,6 +51,9 @@
 			this.$refs.input.$el.appendChild(input);
 		},
 		methods: {
+			getPostData(){
+				return this.formdata
+			},
 			openPopup() {
 				this.$refs.popup.open()
 			},
@@ -89,6 +93,7 @@
 			},
 			// 上传接口api
 			uploadAPI(path){
+				var self = this 
 				// console.info(path);
 				this.filepaths.push(path);
 				// console.info("uploadfileUrl:",this.uploadfileUrl,"filePath:",this.filepaths,"formData:",this.formData);
@@ -100,9 +105,14 @@
 					success: (e) => {
 						//上传成功
 						console.log(e);
+						
 					},
 					fail: (e) => {
 						console.log(e);
+					},
+					complete(e) {
+						console.log(e)
+						self.Property.formdata = e.data
 					}
 				})
 			},

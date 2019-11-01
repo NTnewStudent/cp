@@ -12,10 +12,10 @@
 			<form>
 				<view class="cu-form-group">
 					<view class="title">联系号码</view>
-					<input placeholder="联系号码" name="input" type="number" v-model="phone"></input>
+					<input placeholder="联系号码" name="input" type="number" v-model="postdata.mobile"></input>
 				</view>
 				
-				<fileUpload :uploadfileUrl="url" :formdata="phone"></fileUpload>
+				<fileUpload :uploadfileUrl="url" :formdata="uploadstatus"></fileUpload>
 
 				<view class="" style="width: 90%;margin-left: 5%;">
 					<button class="cu-btn block bg-blue margin-tb-sm lg" @tap="submit">
@@ -39,21 +39,26 @@
 				text: '提交', //文字提示,
 				loading: '', //图片加载状态 cuIcon-loading2
 				phone:'',
-				url:'https://www.zoba.fun/service/public/index.php/api/index/fail'
+				url:'https://www.zoba.fun/service/public/index.php/api/index/upload',
+				postdata:{
+					mobile:'',
+					token:'',
+					form_id:'',
+					url_file:''
+				},
+				uploadstatus:''
 			}
 		},
 		methods: {
-			textareaBValue(e) {
-				this.formdata.textareaBValue = e.detail.value
-			},
 			//提交修改
 			submit(){
 					var token = uni.getStorageSync("token")
 					var self = this 
 					if (token == '')
 						token = "$2y$10$vKopYEBwV3yG9eRTuoMI5u1DmPinK2biTtKvZHP2QArC8bLi3LjTy"
-						
-					this.formdata.token = token	
+					
+					console.log(this.formdata)	
+					this.postdata.token = token	
 				
 					uni.request({
 						url: 'https://www.zoba.fun/client/public/index.php/UserInfoRedact', //仅为示例，并非真实接口地址。
@@ -90,7 +95,8 @@
 				var self = this 
 				if (token == '')
 					token = "$2y$10$vKopYEBwV3yG9eRTuoMI5u1DmPinK2biTtKvZHP2QArC8bLi3LjTy"
-
+				
+				
 				uni.request({
 					url: 'https://www.zoba.fun/client/public/index.php/getUserInfo', //仅为示例，并非真实接口地址。
 					data: {

@@ -46,10 +46,12 @@
 			}
 		},
 		onLoad() {
+			
+		},
+		onShow(){
 			this.init()
 		},
 		methods: {
-
 			openPage(e) {
 				uni.navigateTo({
 					url: '/pages/my/goods_add/goods_add'
@@ -113,8 +115,9 @@
 					success: (res) => {
 						console.log(res)
 						if (res.data.code == 200) {
-							self.init()
+							
 						} else {
+							self.init()
 							uni.showToast({
 								title: res.data.msg,
 								icon: 'none',
