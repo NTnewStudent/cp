@@ -45,15 +45,12 @@
 			input.onchange = (event) => {
 				// 上传附件 获取文件信息
 				this.fileinfo = event.target.files[0];
-				// console.log("文件信息", this.fileinfo);
+				console.log("文件信息",event);
 				this.upload();
 			}
 			this.$refs.input.$el.appendChild(input);
 		},
 		methods: {
-			getPostData(){
-				return this.formdata
-			},
 			openPopup() {
 				this.$refs.popup.open()
 			},
@@ -83,7 +80,6 @@
 						var reader = new FileReader();
 						reader.readAsDataURL(this_.fileinfo);
 						reader.onload = function(e) {
-							// console.log(e.target.result);
 							this_.uploadAPI(e.target.result);//上传接口
 						}
 					} else {
@@ -112,7 +108,8 @@
 					},
 					complete(e) {
 						console.log(e)
-						self.Property.formdata = e.data
+						self.formdata = e.data
+						self.$emit('uploadResult',self.formdata)
 					}
 				})
 			},

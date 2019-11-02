@@ -15,7 +15,7 @@
 					<input placeholder="联系号码" name="input" type="number" v-model="postdata.mobile"></input>
 				</view>
 				
-				<fileUpload :uploadfileUrl="url" :formdata="uploadstatus"></fileUpload>
+				<fileUpload :uploadfileUrl="url" :formdata="uploadstatus" @uploadResult="getUploadResult"></fileUpload>
 
 				<view class="" style="width: 90%;margin-left: 5%;">
 					<button class="cu-btn block bg-blue margin-tb-sm lg" @tap="submit">
@@ -50,6 +50,10 @@
 			}
 		},
 		methods: {
+			getUploadResult(data){
+				console.log(data)
+				this.uploadstatus = data
+			},
 			//提交修改
 			submit(){
 					var token = uni.getStorageSync("token")
@@ -57,13 +61,23 @@
 					if (token == '')
 						token = "$2y$10$vKopYEBwV3yG9eRTuoMI5u1DmPinK2biTtKvZHP2QArC8bLi3LjTy"
 					
-					console.log(this.formdata)	
-					this.postdata.token = token	
+					console.log(this.uploadstatus.data[0])
+					if(this.uploadstatus.code == 400){
+						uni.showToast({
+							title:'文件上传失败'
+						})
+						return
+					}
+					
+					this.postdata.token = token
+					this.postdata.form_id = id 
+					this.postdata.url_file = this.uploadstatus.data[0]
+					
 				
 					uni.request({
 						url: 'https://www.zoba.fun/client/public/index.php/UserInfoRedact', //仅为示例，并非真实接口地址。
 						method:'POST',
-						data: this.formdata,
+						data: this.postdata,
 						success: (res) => {
 							if (res.data.code == 200) {
 								uni.showToast({

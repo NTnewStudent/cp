@@ -1,6 +1,8 @@
 <template>
 	<view>
 		<view class="bg-white" style="height: 95vh;">
+
+
 			<view class="cu-bar bg-white solid-bottom margin-top">
 				<view class="action">
 					<text class="cuIcon-title text-orange "></text> 投标
@@ -10,18 +12,15 @@
 			<form>
 				<view class="cu-form-group">
 					<view class="title">联系号码</view>
-					<input placeholder="联系号码" name="input" type="number" v-model="formdata.phone"></input>
+					<input placeholder="联系号码" name="input" type="number" v-model="postdata.mobile"></input>
 				</view>
 				
-				<view v-if="showfile" class="file">
-					<label class="filename">{{filename}}</label>
-					<label class="del" @tap="delfile">删除</label>
+				<view class="cu-form-group">
+					<view class="title">总报价</view>
+					<input placeholder="总报价" name="totalmoney" type="number" v-model="postdata.totalmoney"></input>
 				</view>
-				<view ref="input" class="input">
-
-				</view>
-				<button class="btn"  type="primary" @tap="uploadBtn">上传文件</button>
-				<uni-popup ref="popup" type="center">大小不能超过{{size}}M</uni-popup>
+				
+				<fileUpload :uploadfileUrl="url" :formdata="uploadstatus" @uploadResult="getUploadResult"></fileUpload>
 
 				<view class="" style="width: 90%;margin-left: 5%;">
 					<button class="cu-btn block bg-blue margin-tb-sm lg" @tap="submit">
@@ -29,142 +28,145 @@
 					</button>
 				</view>
 			</form>
-
 		</view>
 	</view>
 </template>
 
 <script>
-	import uniPopup from "@/components/uni-popup/uni-popup.vue";
+	import fileUpload from '../../../components/xiaoshaoxin-fileUploader/fileUploader'
 	export default {
-		components: {
-			uniPopup
+		components:{
+			fileUpload
 		},
-		props: ["uploadfileUrl", "limitsize", "formData"],
 		data() {
 			return {
-				showfile: false,
-				filename: 'xxx',
-				fileinfo: {},
-				filepaths: [],
 				modalName: null,
 				text: '提交', //文字提示,
 				loading: '', //图片加载状态 cuIcon-loading2
-				formdata: {
-					phone: '',
-					home_phone: '',
-					company_postion: '',
-					contact_name: ''
-				}
-			};
-		},
-		// 计算属性
-		computed: {
-			size: function() {
-				return this.limitsize / 1024;
+				phone:'',
+				url:'https://www.zoba.fun/service/public/index.php/api/common/upload',
+				postdata:{
+					mobile:'',
+					token:'',
+					form_id:'',
+					url_file:'',
+					totalmoney:''
+				},
+				uploadstatus:'',
+				id:''
 			}
-		},
-		// mounted 页面初始化的方法
-		mounted() {
-			var input = document.createElement('input')
-			input.type = 'file'
-			// input.accept =  '.zip'
-			input.style.display = 'none'
-			input.id = 'file'
-			input.onchange = (event) => {
-				// 上传附件 获取文件信息
-				this.fileinfo = event.target.files[0];
-				// console.log("文件信息", this.fileinfo);
-				this.upload();
-			}
-			this.$refs.input.$el.appendChild(input);
 		},
 		methods: {
-			openPopup() {
-				this.$refs.popup.open()
-			},
-			closePopup() {
-				this.$refs.popup.close()
-			},
-			// 上传附件按钮 绑定file的点击事件
-			uploadBtn() {
-				return document.getElementById("file").click();
-			},
-			// 上传附件
-			upload() {
-				let this_ = this;
-				console.info("此文件信息", this_.fileinfo);
-				// 校验文件大小
-				let size = this_.fileinfo.size;
-				if (size > this_.filesize) {
-					this_.openPopup();
-					document.getElementById("file").value = '';
-				} else {
-					// 显示文件名和删除
-					this_.showfile = true;
-					this_.filename = this_.fileinfo.name;
-					// 上传api
-					if (this_.uploadfileUrl) {
-						// 转换文件路径--异步操作
-						var reader = new FileReader();
-						reader.readAsDataURL(this_.fileinfo);
-						reader.onload = function(e) {
-							// console.log(e.target.result);
-							this_.uploadAPI(e.target.result); //上传接口
-						}
-					} else {
-						console.info("无路径");
-					}
+			getUploadResult(data){
+				console.log(data)
+				this.uploadstatus = data
+				let test = JSON.parse(this.uploadstatus)
+				if(test.code == 400){
+					uni.showToast({
+						title:test.msg,
+						duration:2000,
+						icon:'none'
+					})
 				}
 			},
-			// 上传接口api
-			uploadAPI(path) {
-				// console.info(path);
-				this.filepaths.push(path);
-				// console.info("uploadfileUrl:",this.uploadfileUrl,"filePath:",this.filepaths,"formData:",this.formData);
-				uni.uploadFile({
-					url: this.uploadfileUrl,
-					filePath: this.filepaths[0],
-					name: 'file',
-					formData: this.formData,
-					success: (e) => {
-						//上传成功
-						console.log(e);
+			//提交修改
+			submit(){
+					var token = uni.getStorageSync("token")
+					var self = this 
+					if (token == '')
+						token = "$2y$10$vKopYEBwV3yG9eRTuoMI5u1DmPinK2biTtKvZHP2QArC8bLi3LjTy"
+					let	fileName = JSON.parse(this.uploadstatus).data
+					if(this.uploadstatus.code == 400){
+						uni.showToast({
+							title:'文件上传失败'
+						})
+						return
+					}
+					console.log(fileName)
+					this.postdata.token = token
+					this.postdata.form_id = this.id 
+					this.postdata.url_file = fileName.url
+					
+					uni.request({
+						url: 'https://www.zoba.fun/client/public/index.php/addUserForm', //仅为示例，并非真实接口地址。
+						method:'POST',
+						data: this.postdata,
+						success: (res) => {
+							if (res.data.code == 200) {
+								uni.showToast({
+									title: res.data.msg,
+									icon: 'none',
+									duration: 2000
+								})
+							} else {
+								uni.showToast({
+									title: res.data.msg,
+									icon: 'none',
+									duration: 2000
+								})
+							}
+						},
+						fail: (error) => {
+							uni.showToast({
+								title: '加载失败',
+								icon: 'none',
+								duration: 2000
+							})
+						},
+						complete() {
+							setTimeout(function(){
+								uni.navigateBack({
+									url:"/pages/search/serchList/serchList?id="+this.id
+								})
+							},3000)
+						}
+					})
+				
+			},
+			//初始化页面
+			init() {
+				var token = uni.getStorageSync("token")
+				var self = this 
+				if (token == '')
+					token = "$2y$10$vKopYEBwV3yG9eRTuoMI5u1DmPinK2biTtKvZHP2QArC8bLi3LjTy"
+				
+				
+				uni.request({
+					url: 'https://www.zoba.fun/client/public/index.php/getUserInfo', //仅为示例，并非真实接口地址。
+					data: {
+						token: token
 					},
-					fail: (e) => {
-						console.log(e);
+					success: (res) => {
+						if (res.data.code == 200) {
+							self.formdata = res.data.msg
+							console.log(res);
+						} else {
+							uni.showToast({
+								title: '加载失败',
+								icon: 'none',
+								duration: 2000
+							})
+						}
+					},
+					fail: (error) => {
+						uni.showToast({
+							title: '加载失败',
+							icon: 'none',
+							duration: 2000
+						})
 					}
 				})
-			},
-			// 删除附件
-			delfile() {
-				document.getElementById("file").value = ''; //注意清空file,否则不能上传同一个文件
-				this.showfile = false;
-				this.filename = '';
-			},
+			}
+		},
+		onLoad: function(e) {
+			this.id = e.id
+			console.log(e.id)
+		},
+		onShow() {
 		}
 	}
 </script>
 
 <style>
-	.file {
-		font-size: 32upx;
-	}
 
-	.filename {
-		color: #808080;
-	}
-
-	.del {
-		color: #0E90CE;
-		float: right;
-	}
-
-	.btn {
-		width: 100%;
-		margin: 20upx 0;
-		color: #007AFF;
-		background-color: #FFFFFF;
-		border: #007AFF 2upx solid;
-	}
 </style>

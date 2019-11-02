@@ -9,3 +9,6 @@ const app = new Vue({
     ...App
 })
 app.$mount()
+Vue.prototype.checkLogin=function(){
+	return uni.getStorageSync('token')==''?false:true;
+}

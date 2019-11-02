@@ -1,15 +1,15 @@
 <template>
 	<view>
 		<view class="items bg-white cu-list menu magrin-top-lg ">
-			
+
 			<view class="cu-item arrow " @click="openLogin">
 				<view class="content">
 					<text class="cuIcon-emojiflashfill text-pink"></text>
 					<text class="text-grey">登录</text>
 				</view>
 			</view>
-			
-			
+
+
 			<view class="cu-item arrow " @click="openInfo">
 				<view class="content">
 					<text class="cuIcon-emojiflashfill text-pink"></text>
@@ -52,33 +52,74 @@
 			}
 		},
 		methods: {
-			openLogin:function(){
-				uni.navigateTo({
-					url: '/pages/login/login'
-				})
+			openLogin: function() {
+				console.log(this.checkLogin())
+				if (this.checkLogin() == true) {
+					uni.showToast({
+						title: '你已经登陆!',
+						duration: 2000
+					})
+
+				} else {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
+				}
+
 			},
 			// 跳转我的认证
 			myAuth: function() {
-				uni.navigateTo({
-					url: '/pages/my/my_auth/my_auth'
-				})
+				if (this.checkLogin()) {
+					uni.navigateTo({
+						url: '/pages/my/my_auth/my_auth'
+					})
+				} else {
+					uni.showToast({
+						title: '请登陆!',
+						duration: 2000
+					})
+				}
+
 			},
-			openInfo:function(){
-				uni.navigateTo({
-					url: '/pages/my/my_info/my_info'
-				})
+			openInfo: function() {
+				if (this.checkLogin()) {
+					uni.navigateTo({
+						url: '/pages/my/my_info/my_info'
+					})
+				} else {
+					uni.showToast({
+						title: '请登陆!',
+						duration: 2000
+					})
+				}
+
 			},
 
 			// 跳转编辑页面
 			companyEdit: function() {
-				uni.navigateTo({
-					url: "/pages/my/company_edit/company_edit"
-				})
+				if (this.checkLogin()) {
+					uni.navigateTo({
+						url: "/pages/my/company_edit/company_edit"
+					})
+				} else {
+					uni.showToast({
+						title: '请登陆!',
+						duration: 2000
+					})
+				}
 			},
 			GoodsManagement: function() {
-				uni.navigateTo({
-					url: "/pages/my/goods_management/goods_management"
-				})
+				if (this.checkLogin()) {
+					uni.navigateTo({
+						url: "/pages/my/goods_management/goods_management"
+					})
+				} else {
+					uni.showToast({
+						title: '请登陆!',
+						duration: 2000
+					})
+				}
+
 			},
 
 			// 显示二维码

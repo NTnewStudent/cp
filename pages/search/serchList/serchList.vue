@@ -156,16 +156,25 @@
 			}
 		},
 		methods: {
-			showTip(){
+			showTip() {
 				uni.showModal({
-					content:'操作流程：下载材料需求文档，填写物品报价，点击投标提交报价上传填写好的报价表。'+
-					'等待招标商联系。\n\n告知：凡是在本平台交易成功收取百分之一的技术咨询服务费。'
+					content: '操作流程：下载材料需求文档，填写物品报价，点击投标提交报价上传填写好的报价表。' +
+						'等待招标商联系。\n\n告知：凡是在本平台交易成功收取百分之一的技术咨询服务费。'
 				})
 			},
 			down(e) {
 				console.log(e)
 			},
 			downlaod(url) {
+
+				if (this.checkLogin() == false) {
+					uni.showToast({
+						title: '请登陆!',
+						duration: 2000
+					})
+					return;
+				}
+
 				uni.showLoading({
 					title: '下载中...',
 					mask: true
@@ -185,7 +194,7 @@
 								success: function(res) {
 									console.log('打开文档成功');
 								},
-								fail:function(e) {
+								fail: function(e) {
 									console.log(e)
 								}
 							});
@@ -202,10 +211,18 @@
 					}
 				})
 			},
-			upload() {
-				uni.navigateTo({
-					url:"/pages/search/uploadform/uploadform"
-				})
+			upload(id) {
+				if (this.checkLogin()) {
+					uni.navigateTo({
+						url: "/pages/search/uploadform/uploadform?id=" + this.formdata.id
+					})
+				} else {
+					uni.showToast({
+						title: '请登陆!',
+						duration: 2000
+					})
+				}
+
 			},
 			init(param) {
 				var token = uni.getStorageSync("token")

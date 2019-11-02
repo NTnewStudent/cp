@@ -83,6 +83,10 @@
             "path" : "pages/home/test/test",
             "style" : {}
         }
+        ,{
+            "path" : "pages/yewu/yewu",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
